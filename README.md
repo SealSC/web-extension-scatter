@@ -17,7 +17,7 @@ import "@sealsc/web-extension-scatter"
 ```
 
 ### Documentation
-Coming soon.
+[Seal SC web extension scatter](https://sealsc.github.io/documents/en/web-extensions/scatter/)
 
 ### License
 The source is made available under the MIT license.
