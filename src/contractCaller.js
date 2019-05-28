@@ -1,4 +1,5 @@
 import {types, consts} from "@sealsc/web-extension-protocol";
+import scatterTypes from "./types";
 
 function isValidTable(wrapper, table) {
   return wrapper.abi.abi.tables.find(t=> t.name === table)
@@ -29,21 +30,25 @@ class ScatterContractCaller extends types.ExtensionContractCaller {
       })
   }
 
-  async offChainCall(wrapper, table, scope = false, limit = 10) {
+  async offChainCall(wrapper, table, param = new scatterTypes.OffChainCallParam()) {
     if(!isValidTable(wrapper, table)) {
       return new types.Result(null, consts.predefinedStatus.BAD_PARAM(table))
     }
 
-    if(!scope) {
+    if(!(param instanceof scatterTypes.OffChainCallParam)) {
+      return new types.Result(null, consts.predefinedStatus.BAD_PARAM(param))
+    }
+
+    if(!param.scope) {
       let accountResult = await this.extension.actions.getAccount()
-      scope = accountResult.data.name
+      param.scope = accountResult.data.name
     }
 
     let result = await this.extension.eos.getTableRows({
       code: wrapper.address,
-      scope: scope,
+      scope: param.scope,
       table: table,
-      limit: limit,
+      limit: param.limit,
       json:true
     }).catch(reason => {
       return consts.predefinedStatus.UNKNOWN(reason)
