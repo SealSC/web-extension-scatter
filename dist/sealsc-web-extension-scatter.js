@@ -39137,6 +39137,8 @@ var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits
 
 var _webExtensionProtocol = require("@sealsc/web-extension-protocol");
 
+var _types = _interopRequireDefault(require("./types"));
+
 function isValidTable(wrapper, table) {
   return wrapper.abi.abi.tables.find(function (t) {
     return t.name === table;
@@ -39211,8 +39213,7 @@ function (_types$ExtensionContr) {
       var _offChainCall = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee2(wrapper, table) {
-        var scope,
-            limit,
+        var param,
             accountResult,
             result,
             _args2 = arguments;
@@ -39220,55 +39221,62 @@ function (_types$ExtensionContr) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                scope = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : false;
-                limit = _args2.length > 3 && _args2[3] !== undefined ? _args2[3] : 10;
+                param = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : new _types["default"].OffChainCallParam();
 
                 if (isValidTable(wrapper, table)) {
-                  _context2.next = 4;
+                  _context2.next = 3;
                   break;
                 }
 
                 return _context2.abrupt("return", new _webExtensionProtocol.types.Result(null, _webExtensionProtocol.consts.predefinedStatus.BAD_PARAM(table)));
 
-              case 4:
-                if (scope) {
-                  _context2.next = 9;
+              case 3:
+                if (param instanceof _types["default"].OffChainCallParam) {
+                  _context2.next = 5;
                   break;
                 }
 
-                _context2.next = 7;
+                return _context2.abrupt("return", new _webExtensionProtocol.types.Result(null, _webExtensionProtocol.consts.predefinedStatus.BAD_PARAM(param)));
+
+              case 5:
+                if (param.scope) {
+                  _context2.next = 10;
+                  break;
+                }
+
+                _context2.next = 8;
                 return this.extension.actions.getAccount();
 
-              case 7:
+              case 8:
                 accountResult = _context2.sent;
-                scope = accountResult.data.name;
+                param.scope = accountResult.data.name;
 
-              case 9:
-                _context2.next = 11;
+              case 10:
+                _context2.next = 12;
                 return this.extension.eos.getTableRows({
                   code: wrapper.address,
-                  scope: scope,
+                  scope: param.scope,
                   table: table,
-                  limit: limit,
+                  limit: param.limit,
                   json: true
                 })["catch"](function (reason) {
                   return _webExtensionProtocol.consts.predefinedStatus.UNKNOWN(reason);
                 });
 
-              case 11:
+              case 12:
                 result = _context2.sent;
 
                 if (!(result instanceof _webExtensionProtocol.types.Status)) {
-                  _context2.next = 16;
+                  _context2.next = 17;
                   break;
                 }
 
                 return _context2.abrupt("return", new _webExtensionProtocol.types.Result(null, result));
 
-              case 16:
+              case 17:
                 return _context2.abrupt("return", new _webExtensionProtocol.types.Result(result, _webExtensionProtocol.consts.predefinedStatus.SUCCESS()));
 
-              case 17:
+              case 18:
               case "end":
                 return _context2.stop();
             }
@@ -39288,7 +39296,7 @@ function (_types$ExtensionContr) {
 
 exports.ScatterContractCaller = ScatterContractCaller;
 
-},{"@babel/runtime/helpers/asyncToGenerator":3,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/getPrototypeOf":7,"@babel/runtime/helpers/inherits":8,"@babel/runtime/helpers/interopRequireDefault":9,"@babel/runtime/helpers/possibleConstructorReturn":13,"@babel/runtime/regenerator":17,"@sealsc/web-extension-protocol":20}],264:[function(require,module,exports){
+},{"./types":265,"@babel/runtime/helpers/asyncToGenerator":3,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/getPrototypeOf":7,"@babel/runtime/helpers/inherits":8,"@babel/runtime/helpers/interopRequireDefault":9,"@babel/runtime/helpers/possibleConstructorReturn":13,"@babel/runtime/regenerator":17,"@sealsc/web-extension-protocol":20}],264:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -39390,8 +39398,17 @@ var TransferTokenExtraInfo = function TransferTokenExtraInfo(memo) {
   this.symbol = symbol;
 };
 
+var OffChainCallParam = function OffChainCallParam() {
+  var scope = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+  var limit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
+  (0, _classCallCheck2["default"])(this, OffChainCallParam);
+  this.scope = scope;
+  this.limit = limit;
+};
+
 var _default = {
-  TransferTokenExtraInfo: TransferTokenExtraInfo
+  TransferTokenExtraInfo: TransferTokenExtraInfo,
+  OffChainCallParam: OffChainCallParam
 };
 exports["default"] = _default;
 

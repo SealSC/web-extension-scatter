@@ -1,6 +1,6 @@
 {
   "name": "@sealsc/web-extension-scatter",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Scatter extension wrapper which conform Seal-SC web extension protocol.",
   "main": "src/extension.js",
   "repository": {
