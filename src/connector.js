@@ -9,7 +9,7 @@ class ScatterConnector extends types.ExtensionConnector {
     }
 
     network = network || this.extension.network
-    return ScatterJS.scatter.login({accounts:[network]})
+    return ScatterJS.scatter.getIdentity({accounts:[network]})
       .then(()=>{
         let account = this.extension.webjsInstance.identity.accounts.find(a => a.blockchain === 'eos')
         if(!account) {
@@ -29,7 +29,7 @@ class ScatterConnector extends types.ExtensionConnector {
     }
 
     try {
-      await ScatterJS.scatter.logout()
+      await ScatterJS.scatter.forgetIdentity()
         .catch(reason=>{
           //do nothing
           console.log(reason)

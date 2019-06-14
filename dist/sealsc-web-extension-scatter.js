@@ -39017,7 +39017,7 @@ function (_types$ExtensionConne) {
 
               case 5:
                 network = network || this.extension.network;
-                return _context.abrupt("return", _scatterjsCore["default"].scatter.login({
+                return _context.abrupt("return", _scatterjsCore["default"].scatter.getIdentity({
                   accounts: [network]
                 }).then(function () {
                   var account = _this.extension.webjsInstance.identity.accounts.find(function (a) {
@@ -39074,7 +39074,7 @@ function (_types$ExtensionConne) {
               case 5:
                 _context2.prev = 5;
                 _context2.next = 8;
-                return _scatterjsCore["default"].scatter.logout()["catch"](function (reason) {
+                return _scatterjsCore["default"].scatter.forgetIdentity()["catch"](function (reason) {
                   //do nothing
                   console.log(reason);
                 });
